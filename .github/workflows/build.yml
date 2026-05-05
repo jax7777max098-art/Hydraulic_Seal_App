@@ -1,4 +1,4 @@
-name: Build Flutter APK and Windows EXE
+name: Build Windows EXE Only
 
 on:
   workflow_dispatch:
@@ -7,7 +7,6 @@ jobs:
   build:
     runs-on: windows-latest
     env:
-      # هذا السطر هو "المفتاح" لإيقاف الخطأ الذي يظهر لك
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     steps:
       - uses: actions/checkout@v4
@@ -20,17 +19,11 @@ jobs:
       - name: Install Dependencies
         run: flutter pub get
 
-      - name: Build Android APK
-        # أضفنا هذا التعديل لضمان عدم توقف البناء بسبب الأيقونات
-        run: flutter build apk --release --no-tree-shake-icons
-
       - name: Build Windows EXE
         run: flutter build windows --release
 
-      - name: Upload Artifacts
+      - name: Upload Windows EXE
         uses: actions/upload-artifact@v4
         with:
-          name: Final-Production-Builds
-          path: |
-            build/app/outputs/flutter-apk/app-release.apk
-            build/windows/runner/Release/
+          name: Windows-App-Release
+          path: build/windows/runner/Release/
