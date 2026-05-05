@@ -7,6 +7,7 @@ jobs:
   build:
     runs-on: windows-latest
     env:
+      # هذا الأمر يحل مشكلة Node24 التي سببت الخطأ السابق
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     steps:
       - uses: actions/checkout@v4
@@ -14,21 +15,22 @@ jobs:
       - name: Install Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: 'stable'
+          channel: 'stable'
 
       - name: Install Dependencies
         run: flutter pub get
 
       - name: Build Android APK
-        run: flutter build apk --release
+        # أضفنا هذا الأمر لتجنب أي تعارض في الأيقونات أو الصور
+        run: flutter build apk --release --no-tree-shake-icons
 
       - name: Build Windows EXE
         run: flutter build windows --release
 
-      - name: Upload Artifacts
+      - name: Upload Final Files
         uses: actions/upload-artifact@v4
         with:
-          name: Final-Builds
+          name: Full-Project-Builds
           path: |
             build/app/outputs/flutter-apk/app-release.apk
             build/windows/runner/Release/
