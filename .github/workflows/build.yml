@@ -7,6 +7,7 @@ jobs:
   build:
     runs-on: windows-latest
     env:
+      # هذا الأمر يحل مشكلة Node ويجبر النظام على العمل بنجاح
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     steps:
       - uses: actions/checkout@v4
@@ -22,8 +23,8 @@ jobs:
       - name: Build Windows EXE
         run: flutter build windows --release
 
-      - name: Upload Windows EXE
+      - name: Upload Windows App
         uses: actions/upload-artifact@v4
         with:
-          name: Windows-App-Release
+          name: Windows-Release
           path: build/windows/runner/Release/
